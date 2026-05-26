@@ -1,4 +1,3 @@
-// SW mínimo — solo desregistra versiones anteriores que puedan estar cacheando mal
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (e) => {
   e.waitUntil(
@@ -7,4 +6,3 @@ self.addEventListener('activate', (e) => {
       .then(() => self.clients.claim())
   );
 });
-// Sin fetch handler — todas las peticiones van directo a la red
