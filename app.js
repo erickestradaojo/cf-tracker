@@ -1,0 +1,1471 @@
+// ============================================
+// CF TRACKER · ERICK ESTRADA
+// Vanilla JS PWA - no dependencies
+// ============================================
+
+// ============================================
+// ICONS (SVG inline - Lucide)
+// ============================================
+const Icons = {
+  play: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>',
+  pause: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>',
+  reset: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>',
+  chevronLeft: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>',
+  chevronRight: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>',
+  x: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
+  plus: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>',
+  check: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+  arrowDown: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>',
+  arrowUp: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>',
+  dumbbell: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.4 14.4 9.6 9.6"/><path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"/><path d="m21.5 21.5-1.4-1.4"/><path d="M3.9 3.9 2.5 2.5"/><path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/></svg>',
+  utensils: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>',
+  trendUp: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>',
+  history: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>',
+  calendar: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>',
+  share: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>',
+};
+
+// ============================================
+// DATA: SEMANA 1
+// ============================================
+const WEEK_1 = {
+  weekNumber: 1,
+  label: 'Semana 1',
+  startDate: '2026-05-25',
+  days: {
+    LUN: {
+      name: 'LUNES',
+      blocks: [
+        {
+          id: 'lun-1', type: 'WEIGHTLIFTING', title: 'Weightlifting',
+          exercises: [
+            {
+              name: 'OVERHEAD SQUAT',
+              prescription: [
+                { sets: 1, reps: 5, weight: 65, unit: 'lbs' },
+                { sets: 1, reps: 4, weight: 70, unit: 'lbs' },
+                { sets: 2, reps: 3, weight: 75, unit: 'lbs' },
+                { sets: 2, reps: 3, weight: 80, unit: 'lbs' },
+                { sets: 2, reps: 2, weight: 85, unit: 'lbs' },
+                { sets: 1, reps: 1, weight: 95, unit: 'lbs' },
+              ]
+            },
+            { name: 'FRONT SQUAT', prescription: [{ sets: 5, reps: 5, weight: 75, unit: '%' }] },
+            { name: 'SNATCH PULL (ELBOW)', note: 'usar hook grip', prescription: [{ sets: 4, reps: 4, weight: 145, unit: 'lbs' }] }
+          ]
+        },
+        { id: 'lun-2', type: 'CLASS', title: 'Clase CrossFit' },
+        {
+          id: 'lun-3', type: 'STRENGTH', title: 'Strength',
+          exercises: [
+            { name: 'ALT BOX STEP OVER', note: 'REST 1:30 entre rounds', prescription: [{ sets: 4, reps: 12, weight: 35, unit: 'lbs DB' }] },
+            { name: 'SANDBAG WALK (BEAR HUG)', prescription: [{ sets: 4, reps: '40 mts', weight: 90, unit: 'lbs' }] }
+          ]
+        },
+        {
+          id: 'lun-4', type: 'AEROBIC', title: 'Aerobic Capacity',
+          description: '3×800 MTS ROW', target: 'UNDER 3:45', rest: 'REST 3 MIN', extra: 'DUMPER 6',
+          intervals: 3, distance: '800m'
+        }
+      ]
+    },
+    MAR: {
+      name: 'MARTES',
+      blocks: [
+        {
+          id: 'mar-1', type: 'WEIGHTLIFTING', title: 'Weightlifting',
+          exercises: [
+            {
+              name: '3 SPLIT JERK TnG', note: 'cuidado con postura',
+              prescription: [
+                { sets: 1, reps: 4, weight: 65, unit: 'lbs' },
+                { sets: 1, reps: 3, weight: 70, unit: 'lbs' },
+                { sets: 2, reps: 3, weight: 75, unit: 'lbs' },
+                { sets: 3, reps: 2, weight: 80, unit: 'lbs' },
+                { sets: 4, reps: 1, weight: 85, unit: 'lbs' },
+              ]
+            },
+            { name: 'ALT BACK STEP LUNGES (barra atrás)', note: '45% del back squat, 6 por pierna', prescription: [{ sets: 4, reps: 12, weight: 45, unit: '% BS' }] },
+            { name: 'DEADLIFT TEMPO 3230', prescription: [{ sets: 4, reps: 6, weight: 73, unit: '%' }] }
+          ]
+        },
+        {
+          id: 'mar-2', type: 'GYMNASTICS', title: 'Gymnastics',
+          exercises: [
+            { name: 'DIPS (paralelas)', note: 'usar apoyo si es necesario', prescription: [{ sets: 6, reps: 7 }] }
+          ]
+        },
+        {
+          id: 'mar-3', type: 'CONDITIONING', title: 'Conditioning',
+          format: 'FOR TIME',
+          description: '2 sets de:\n30-20-10\nWALL BALL SHOT 20 LBS\nTOES TO BAR\nASSAULT BIKE CAL',
+          rest: 'REST 3 MIN entre sets'
+        },
+        { id: 'mar-4', type: 'CLASS', title: 'Clase CrossFit' }
+      ]
+    },
+    MIE: {
+      name: 'MIÉRCOLES',
+      blocks: [
+        {
+          id: 'mie-1', type: 'WEIGHTLIFTING', title: 'Weightlifting',
+          exercises: [
+            {
+              name: 'POWER SNATCH + 2 SNATCH BALANCE',
+              prescription: [
+                { sets: 1, reps: 5, weight: 55, unit: 'lbs' },
+                { sets: 1, reps: 4, weight: 60, unit: 'lbs' },
+                { sets: 2, reps: 3, weight: 65, unit: 'lbs' },
+                { sets: 2, reps: 2, weight: 70, unit: 'lbs' },
+                { sets: 1, reps: 2, weight: 75, unit: 'lbs' },
+                { sets: 3, reps: 1, weight: 85, unit: 'lbs' },
+              ]
+            },
+            { name: 'BACK SQUAT', prescription: [{ sets: 4, reps: 4, weight: 85, unit: '%' }] },
+            { name: '1 HANG CLEAN PULL PAUSED KNEE + 2 HIGH HANG PULL', prescription: [{ sets: 3, reps: 4, weight: 165, unit: 'lbs' }] }
+          ]
+        },
+        {
+          id: 'mie-2', type: 'GYMNASTICS', title: 'Gymnastics',
+          exercises: [
+            { name: 'BUTTERFLY PULL UPS', note: 'práctica de técnica, descansa lo necesario', prescription: [{ sets: 10, reps: 10 }] }
+          ]
+        },
+        { id: 'mie-3', type: 'CLASS', title: 'Clase CrossFit' },
+        {
+          id: 'mie-4', type: 'CONDITIONING', title: 'Conditioning',
+          format: 'FOR TIME',
+          description: '1000 MTS ROW\n30 HSPU\n30 POWER CLEAN 95 LBS\n30 HSPU\n1000 MTS ROW'
+        }
+      ]
+    },
+    JUE: {
+      name: 'JUEVES',
+      blocks: [
+        {
+          id: 'jue-1', type: 'AEROBIC', title: 'Aerobic Capacity',
+          description: '2×1600 MTS RUN', target: 'UNDER 8 MIN', rest: 'REST 3 MIN',
+          intervals: 2, distance: '1600m'
+        },
+        { id: 'jue-2', type: 'CLASS', title: 'Clase CrossFit (opcional)' },
+        { id: 'jue-3', type: 'MOBILITY', title: 'Movilidad', description: 'ESTIRAR 30 MIN INTENSO', duration: 30 }
+      ]
+    },
+    VIE: {
+      name: 'VIERNES',
+      blocks: [
+        { id: 'vie-1', type: 'PR_TEST', title: '1RM Test', exerciseName: 'HANG SQUAT SNATCH', warmup: 'Calentar 5 min barra vacía + movilidad' },
+        {
+          id: 'vie-2', type: 'CONDITIONING', title: 'Conditioning',
+          format: 'FOR TIME',
+          description: '10-15-20-25-30 PULL UP\n5-4-3-2-1 SQUAT CLEAN 95 LBS'
+        },
+        {
+          id: 'vie-3', type: 'STRENGTH', title: 'Strength',
+          exercises: [
+            { name: 'BENCH PRESS', prescription: [{ sets: 4, reps: 12, weight: 95, unit: 'lbs' }] },
+            { name: 'INCLINE PUSH UPS', prescription: [{ sets: 4, reps: 13 }] }
+          ]
+        },
+        { id: 'vie-4', type: 'CLASS', title: 'Clase CrossFit' },
+        {
+          id: 'vie-5', type: 'STRENGTH', title: 'Core Work',
+          exercises: [
+            { name: 'PVC SUPERMAN', prescription: [{ sets: 4, reps: 15 }] },
+            { name: 'PVC V-SIT UP', prescription: [{ sets: 4, reps: 25 }] }
+          ]
+        }
+      ]
+    },
+    SAB: {
+      name: 'SÁBADO',
+      blocks: [
+        { id: 'sab-1', type: 'PR_TEST', title: '1RM Test', exerciseName: 'SQUAT CLEAN', warmup: 'Calentar 5 min con barra vacía' },
+        {
+          id: 'sab-2', type: 'CONDITIONING', title: 'Conditioning',
+          format: 'FOR TIME',
+          description: '30 PULL UPS\n30 THRUSTERS 65 LBS\n20 PULL UPS\n20 THRUSTERS 75 LBS\n10 C2B\n10 THRUSTERS 85 LBS'
+        },
+        {
+          id: 'sab-3', type: 'AEROBIC', title: 'Aerobic Capacity',
+          description: '2×2000 MTS RUN', target: 'SUB 12 MIN', rest: 'REST 3 MIN',
+          intervals: 2, distance: '2000m'
+        }
+      ]
+    }
+  }
+};
+
+const DAY_KEYS = ['LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB'];
+const DAY_NAMES = { LUN:'LUNES', MAR:'MARTES', MIE:'MIÉRCOLES', JUE:'JUEVES', VIE:'VIERNES', SAB:'SÁBADO' };
+
+const TYPE_META = {
+  WEIGHTLIFTING: { color: '#DC2626', label: 'WL', name: 'Weightlifting' },
+  STRENGTH:      { color: '#F59E0B', label: 'ST', name: 'Strength' },
+  CONDITIONING:  { color: '#EA580C', label: 'WOD', name: 'Conditioning' },
+  AEROBIC:       { color: '#2563EB', label: 'AC', name: 'Aerobic' },
+  GYMNASTICS:    { color: '#9333EA', label: 'GYM', name: 'Gymnastics' },
+  CLASS:         { color: '#52525B', label: 'CF', name: 'Clase' },
+  PR_TEST:       { color: '#FACC15', label: '1RM', name: 'PR Test' },
+  MOBILITY:      { color: '#059669', label: 'MOB', name: 'Movilidad' },
+};
+
+const BLOCK_TYPES = {
+  'WEIGHTLIFTING': 'WEIGHTLIFTING', 'WL': 'WEIGHTLIFTING',
+  'STRENGTH': 'STRENGTH', 'STRENGHT': 'STRENGTH', 'ST': 'STRENGTH',
+  'CONDITIONING': 'CONDITIONING', 'WOD': 'CONDITIONING',
+  'AEROBICCAPACITY': 'AEROBIC', 'AEROBIC': 'AEROBIC', 'AC': 'AEROBIC',
+  'GYMNASTICS': 'GYMNASTICS', 'GYM': 'GYMNASTICS',
+  'COREWORK': 'STRENGTH', 'CORE': 'STRENGTH',
+  'MOBILITY': 'MOBILITY', 'MOVILIDAD': 'MOBILITY',
+};
+
+// ============================================
+// STATE & STORAGE
+// ============================================
+const STORAGE_KEY = 'cf_tracker_v2';
+
+let state = loadData();
+let timerInterval = null;
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) { console.error(e); }
+  return {
+    activeWeek: 1,
+    weeks: { 1: WEEK_1 },
+    logs: {},
+    prs: {},
+    view: 'home', // home, training, nutrition, prs
+    activeDay: 'LUN',
+    historyOf: null,
+    showPaste: false,
+    showWeekPicker: false,
+  };
+}
+
+function saveData() {
+  try {
+    const persistable = { activeWeek: state.activeWeek, weeks: state.weeks, logs: state.logs, prs: state.prs };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(persistable));
+  } catch(e) { console.error(e); }
+}
+
+function setState(updater) {
+  if (typeof updater === 'function') {
+    state = { ...state, ...updater(state) };
+  } else {
+    state = { ...state, ...updater };
+  }
+  saveData();
+  render();
+}
+
+function updateLog(key, value) {
+  setState({ logs: { ...state.logs, [key]: value } });
+}
+
+function savePR(name, weight) {
+  const cur = state.prs[name];
+  if (!cur || parseFloat(weight) > parseFloat(cur.weight)) {
+    setState({
+      prs: { ...state.prs, [name]: {
+        weight, date: new Date().toLocaleDateString('es-MX'), week: state.activeWeek
+      }}
+    });
+  }
+}
+
+// ============================================
+// PARSER for pasting Word text
+// ============================================
+function parseSetLine(line) {
+  if (/1\s*rm/i.test(line)) return { type: '1RM', raw: line.trim() };
+  
+  // patrón NxM PESO UNIT
+  const setRegex = /(\d+)\s*x\s*(\d+)\s+(\d+(?:\.\d+)?)\s*(lbs?|kg|%)?/i;
+  const m = line.toLowerCase().match(setRegex);
+  if (m) {
+    return {
+      type: 'sets',
+      sets: parseInt(m[1]),
+      reps: parseInt(m[2]),
+      weight: parseFloat(m[3]),
+      unit: m[4] || 'lbs',
+    };
+  }
+  return null;
+}
+
+function parseWeek(text, weekNum) {
+  const days = { LUN:[], MAR:[], MIE:[], JUE:[], VIE:[], SAB:[] };
+  const dayMap = { 
+    LUNES:'LUN', MARTES:'MAR', MIÉRCOLES:'MIE', MIERCOLES:'MIE', 
+    JUEVES:'JUE', VIERNES:'VIE', SÁBADO:'SAB', SABADO:'SAB' 
+  };
+  
+  let currentDay = null, currentBlock = null, currentExercise = null, blockCounter = 0;
+  
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  
+  for (const line of lines) {
+    const upper = line.toUpperCase();
+    
+    // detect day
+    let dayFound = false;
+    for (const [name, key] of Object.entries(dayMap)) {
+      if (upper === name || upper.startsWith(name + ' ')) {
+        currentDay = key;
+        currentBlock = null; currentExercise = null; blockCounter = 0;
+        dayFound = true;
+        break;
+      }
+    }
+    if (dayFound) continue;
+    if (!currentDay) continue;
+    
+    // detect block type
+    const blockMatch = upper.match(/^\d+\s*[-.]?\s*(WEIGHTLIFTING|STRENGHT|STRENGTH|CONDITIONING|AEROBIC\s*CAPACITY|GYMNASTICS|COREWORK|MOBILITY|MOVILIDAD)/);
+    if (blockMatch) {
+      const k = blockMatch[1].replace(/\s+/g,'');
+      const type = BLOCK_TYPES[k] || 'STRENGTH';
+      blockCounter++;
+      currentBlock = {
+        id: `${currentDay.toLowerCase()}-${blockCounter}`,
+        type,
+        title: TYPE_META[type]?.name || 'Bloque',
+        exercises: []
+      };
+      days[currentDay].push(currentBlock);
+      currentExercise = null;
+      continue;
+    }
+    
+    if (/^CLASE\s*(DE)?\s*CROSSFIT/i.test(upper)) {
+      blockCounter++;
+      days[currentDay].push({
+        id: `${currentDay.toLowerCase()}-${blockCounter}`,
+        type: 'CLASS', title: 'Clase CrossFit'
+      });
+      currentBlock = null; currentExercise = null;
+      continue;
+    }
+    
+    if (/^FOR\s*TIME/i.test(upper) || /^AMRAP/i.test(upper)) {
+      if (currentBlock && currentBlock.type === 'CONDITIONING') {
+        currentBlock.format = upper;
+      }
+      continue;
+    }
+    
+    if (!currentBlock) continue;
+    
+    if (currentBlock.type === 'CONDITIONING' || currentBlock.type === 'AEROBIC') {
+      currentBlock.description = (currentBlock.description || '') + (currentBlock.description ? '\n' : '') + line;
+      continue;
+    }
+    
+    const setInfo = parseSetLine(line);
+    if (setInfo && setInfo.type === 'sets' && currentExercise) {
+      currentExercise.prescription.push({
+        sets: setInfo.sets, reps: setInfo.reps, weight: setInfo.weight, unit: setInfo.unit
+      });
+      continue;
+    }
+    
+    if (currentBlock.exercises) {
+      currentExercise = { name: line, prescription: [] };
+      currentBlock.exercises.push(currentExercise);
+    }
+  }
+  
+  const result = {
+    weekNumber: weekNum,
+    label: `Semana ${weekNum}`,
+    startDate: new Date().toISOString().slice(0,10),
+    days: {}
+  };
+  DAY_KEYS.forEach(dk => {
+    result.days[dk] = { name: DAY_NAMES[dk], blocks: days[dk] };
+  });
+  return result;
+}
+
+// ============================================
+// RENDER HELPERS
+// ============================================
+function el(tag, attrs = {}, ...children) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'style') e.style.cssText = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2).toLowerCase(), v);
+    else if (k === 'html') e.innerHTML = v;
+    else if (v !== null && v !== undefined && v !== false) e.setAttribute(k, v);
+  }
+  for (const c of children.flat()) {
+    if (c == null || c === false) continue;
+    if (typeof c === 'string' || typeof c === 'number') e.appendChild(document.createTextNode(c));
+    else e.appendChild(c);
+  }
+  return e;
+}
+
+function icon(name) {
+  return el('span', { html: Icons[name] });
+}
+
+// ============================================
+// COMPONENTS
+// ============================================
+
+function Timer(onSave) {
+  let seconds = 0;
+  let running = false;
+  
+  const display = el('div', { class: 'font-mono text-6xl font-black text-yellow-400 text-center tracking-tighter mb-3' }, '00:00');
+  
+  const fmt = (n) => `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`;
+  
+  const playBtn = el('button', {
+    class: 'bg-yellow-400 text-black font-black px-5 py-2 rounded uppercase text-xs tracking-wider',
+    onclick: () => {
+      running = !running;
+      if (running) {
+        timerInterval = setInterval(() => { seconds++; display.textContent = fmt(seconds); }, 1000);
+        playBtn.innerHTML = Icons.pause;
+      } else {
+        clearInterval(timerInterval);
+        playBtn.innerHTML = Icons.play;
+      }
+    },
+    html: Icons.play
+  });
+  
+  const resetBtn = el('button', {
+    class: 'bg-zinc-800 text-white px-4 py-2 rounded',
+    onclick: () => { seconds = 0; running = false; clearInterval(timerInterval); display.textContent = '00:00'; playBtn.innerHTML = Icons.play; },
+    html: Icons.reset
+  });
+  
+  const saveBtn = el('button', {
+    class: 'bg-red-600 text-white font-black px-4 py-2 rounded text-xs uppercase tracking-wider',
+    onclick: () => {
+      if (seconds > 0) {
+        onSave(fmt(seconds));
+        seconds = 0; running = false;
+        clearInterval(timerInterval);
+        display.textContent = '00:00';
+        playBtn.innerHTML = Icons.play;
+      }
+    }
+  }, 'Guardar');
+  
+  return el('div', { class: 'bg-black border-2 border-yellow-400 rounded-lg p-4 mb-3' },
+    display,
+    el('div', { class: 'flex gap-2 justify-center' }, playBtn, resetBtn, saveBtn)
+  );
+}
+
+// ── SET ROW: solo número del set + 3 botones compactos ──────────────────────
+// La prescripción (peso/reps) se muestra UNA vez como header del grupo,
+// no se repite en cada fila. Solo aparece aquí si cambia vs. el set anterior.
+function SetRow({ globalIdx, displayIdx, logKey }) {
+  const log = state.logs[logKey] || {};
+  const status = log.status;
+
+  const updateStatus = (newStatus) => {
+    updateLog(logKey, { ...log, status: status === newStatus ? null : newStatus });
+  };
+
+  const statusBg = {
+    prescribed: '#064e3b', // emerald-950
+    less:       '#451a03', // amber-950
+    more:       '#450a0a', // red-950
+  }[status] || '#09090b';
+
+  const statusBorder = {
+    prescribed: '#10b981',
+    less:       '#f59e0b',
+    more:       '#ef4444',
+  }[status] || '#27272a';
+
+  const row = el('div', {
+    class: 'flex items-center gap-2 rounded px-2 py-1.5 transition',
+    style: `background:${statusBg}; border:1.5px solid ${statusBorder};`
+  });
+
+  // Número del set
+  row.appendChild(el('div', {
+    class: 'font-mono font-black text-white text-sm flex-shrink-0',
+    style: 'width:24px; text-align:center;'
+  }, String(displayIdx)));
+
+  // Botones RX / Menos / Más
+  const mkBtn = (s, label, activeColor, inactiveColor) => {
+    const btn = el('button', {
+      class: 'font-black rounded uppercase tracking-wider transition flex-1',
+      style: `font-size:10px; padding:5px 0; background:${status === s ? activeColor : '#18181b'}; color:${status === s ? '#000' : inactiveColor}; border:1px solid ${status === s ? activeColor : '#3f3f46'};`,
+      onclick: () => updateStatus(s)
+    }, label);
+    return btn;
+  };
+
+  const btnWrap = el('div', { class: 'flex gap-1 flex-1' });
+  btnWrap.appendChild(mkBtn('less',       '↓ Menos', '#f59e0b', '#52525b'));
+  btnWrap.appendChild(mkBtn('prescribed', '✓ RX',    '#10b981', '#52525b'));
+  btnWrap.appendChild(mkBtn('more',       '↑ Más',   '#ef4444', '#52525b'));
+  row.appendChild(btnWrap);
+
+  // Input de peso real (solo si less/more)
+  if (status === 'less' || status === 'more') {
+    const winput = el('input', {
+      type: 'text', inputmode: 'decimal',
+      placeholder: status === 'less' ? 'lbs reales' : 'lbs logrados',
+      value: log.weight || '',
+      style: 'width:90px; flex-shrink:0; background:#000; border:1px solid #3f3f46; border-radius:4px; padding:4px 6px; font-family:monospace; font-size:12px; color:#facc15; text-align:center;'
+    });
+    winput.addEventListener('input', (e) => updateLog(logKey, { ...log, weight: e.target.value }));
+    row.appendChild(winput);
+  }
+
+  return row;
+}
+
+// ── EXERCISE BLOCK: header con nombre + grupos de sets ───────────────────────
+// Cada "grupo" es la prescripción (NxReps @ Peso). Los sets dentro del grupo
+// solo muestran su número, no repiten la prescripción.
+function ExerciseBlock(exercise, weekKey, dayKey, blockId) {
+  const wrapper = el('div', { class: 'mb-5' });
+
+  // Nombre del ejercicio + botón de historial
+  wrapper.appendChild(
+    el('div', { class: 'flex items-start justify-between mb-2 gap-2' },
+      el('div', { class: 'flex-1' },
+        el('div', { class: 'text-white font-black text-sm uppercase tracking-wide leading-tight' }, exercise.name),
+        exercise.note ? el('div', { class: 'text-amber-500 italic mt-0.5', style: 'font-size:11px;' }, '↳ ' + exercise.note) : null
+      ),
+      el('button', {
+        class: 'text-zinc-500 p-1 flex-shrink-0',
+        style: 'font-size:16px;',
+        onclick: () => setState({ historyOf: exercise.name }),
+        html: Icons.history
+      })
+    )
+  );
+
+  // Notas del ejercicio (un solo campo compartido)
+  const noteLogKey = `${weekKey}_${dayKey}_${blockId}_${exercise.name}_note`;
+  const noteLog = state.logs[noteLogKey] || {};
+  const noteInput = el('input', {
+    type: 'text',
+    placeholder: 'Notas del ejercicio (opcional)',
+    value: noteLog.text || '',
+    style: 'background:#18181b; border-color:#27272a; padding:4px 8px; font-size:12px; color:#d4d4d8; margin-bottom:8px;'
+  });
+  noteInput.addEventListener('input', (e) => updateLog(noteLogKey, { text: e.target.value }));
+  wrapper.appendChild(noteInput);
+
+  // Construir grupos: cada entrada en prescription = un grupo
+  // con su propio encabezado de prescripción + N filas de set
+  let globalIdx = 0;
+  exercise.prescription.forEach((p, pIdx) => {
+    const groupSets = p.sets || 1;
+    const weightStr = p.weight != null
+      ? `${p.weight}${p.unit === '%' ? '%' : ` ${p.unit || 'lbs'}`}`
+      : '';
+
+    // Header del grupo: "Nx Reps @ Peso"
+    const groupLabel = `${groupSets}×${p.reps}${weightStr ? ' @ ' + weightStr : ''}`;
+    const groupHeader = el('div', {
+      class: 'flex items-center gap-2 mb-1 mt-2',
+    },
+      el('div', {
+        class: 'font-mono font-black tracking-tight',
+        style: 'font-size:15px; color:#facc15;'
+      }, groupLabel),
+      el('div', { style: 'flex:1; height:1px; background:#27272a;' })
+    );
+    wrapper.appendChild(groupHeader);
+
+    // Filas de set individuales (solo número + botones)
+    const rowsWrap = el('div', { class: 'space-y-1' });
+    for (let i = 0; i < groupSets; i++) {
+      const logKey = `${weekKey}_${dayKey}_${blockId}_${exercise.name}_${globalIdx}`;
+      rowsWrap.appendChild(SetRow({ globalIdx, displayIdx: globalIdx + 1, logKey }));
+      globalIdx++;
+    }
+    wrapper.appendChild(rowsWrap);
+  });
+
+  return wrapper;
+}
+
+function ConditioningBlock(block, weekKey, dayKey) {
+  const logKey = `${weekKey}_${dayKey}_${block.id}_wod`;
+  const log = state.logs[logKey] || {};
+  
+  const wrapper = el('div', {});
+  
+  if (block.format) {
+    wrapper.appendChild(el('div', { 
+      class: 'bg-orange-600 text-white font-black uppercase tracking-widest mb-2',
+      style: 'display:inline-block; padding:2px 8px; border-radius:4px; font-size:10px;'
+    }, block.format));
+  }
+  
+  wrapper.appendChild(el('pre', {
+    class: 'font-mono text-white text-sm whitespace-pre-wrap leading-relaxed bg-black p-3 rounded mb-2',
+    style: 'border:1px solid #27272a;'
+  }, block.description));
+  
+  if (block.rest) {
+    wrapper.appendChild(el('div', { class: 'text-zinc-500 text-[11px] mb-2' }, '⏱ ' + block.rest));
+  }
+  
+  // Timer button or timer itself
+  let timerShown = false;
+  const timerContainer = el('div', {});
+  const openTimerBtn = el('button', {
+    class: 'w-full bg-yellow-400 text-black font-black py-2 rounded uppercase text-xs tracking-wider mb-2',
+    onclick: () => {
+      if (!timerShown) {
+        timerContainer.appendChild(Timer((t) => updateLog(logKey, { ...log, time: t })));
+        openTimerBtn.remove();
+        timerShown = true;
+      }
+    }
+  }, '⏱ Abrir Timer');
+  wrapper.appendChild(openTimerBtn);
+  wrapper.appendChild(timerContainer);
+  
+  // Time + notes
+  const timeIn = el('input', {
+    type: 'text',
+    placeholder: 'Tiempo final (mm:ss)',
+    value: log.time || '',
+    style: 'font-family:monospace; margin-bottom:8px;'
+  });
+  timeIn.addEventListener('input', (e) => updateLog(logKey, { ...log, time: e.target.value }));
+  wrapper.appendChild(timeIn);
+  
+  const notesIn = el('textarea', {
+    placeholder: 'Notas: Rx/Scaled, cómo se sintió...',
+    rows: 2,
+    style: 'font-size:14px;'
+  });
+  notesIn.value = log.notes || '';
+  notesIn.addEventListener('input', (e) => updateLog(logKey, { ...log, notes: e.target.value }));
+  wrapper.appendChild(notesIn);
+  
+  return wrapper;
+}
+
+function AerobicBlock(block, weekKey, dayKey) {
+  const wrapper = el('div', {});
+  
+  wrapper.appendChild(el('div', { class: 'font-mono text-white text-base font-black mb-1' }, block.description));
+  if (block.target) wrapper.appendChild(el('div', { class: 'text-yellow-400 text-xs font-bold mb-1' }, '🎯 ' + block.target));
+  if (block.rest) wrapper.appendChild(el('div', { class: 'text-zinc-500 text-[11px] mb-1' }, block.rest));
+  if (block.extra) wrapper.appendChild(el('div', { class: 'text-amber-500 text-[11px] italic mb-2' }, '+ ' + block.extra));
+  
+  const intervalsWrap = el('div', { class: 'space-y-2', style: 'margin: 12px 0;' });
+  for (let i = 0; i < block.intervals; i++) {
+    const logKey = `${weekKey}_${dayKey}_${block.id}_int_${i}`;
+    const log = state.logs[logKey] || {};
+    const filled = !!log.time;
+    
+    const row = el('div', { 
+      class: `flex items-center gap-2 p-2 rounded border-2 ${filled ? 'border-blue-500 bg-blue-950' : 'border-zinc-800 bg-zinc-950'}`
+    },
+      el('div', { class: 'w-8 h-8 rounded bg-zinc-900 border border-zinc-700 flex items-center justify-center font-mono font-black text-white text-xs flex-shrink-0' }, String(i+1))
+    );
+    const inp = el('input', {
+      type: 'text',
+      placeholder: 'mm:ss',
+      value: log.time || '',
+      style: 'background:#000; font-family:monospace; text-align:center; font-size:14px; padding:6px 8px; flex:1;'
+    });
+    inp.addEventListener('input', (e) => updateLog(logKey, { ...log, time: e.target.value }));
+    row.appendChild(inp);
+    intervalsWrap.appendChild(row);
+  }
+  wrapper.appendChild(intervalsWrap);
+  
+  let timerShown = false;
+  const tContainer = el('div', {});
+  const openBtn = el('button', {
+    class: 'w-full bg-blue-600 text-white font-black py-2 rounded uppercase text-xs tracking-wider',
+    onclick: () => {
+      if (!timerShown) {
+        tContainer.appendChild(Timer(() => {}));
+        openBtn.remove();
+        timerShown = true;
+      }
+    }
+  }, '⏱ Timer');
+  wrapper.appendChild(openBtn);
+  wrapper.appendChild(tContainer);
+  
+  return wrapper;
+}
+
+function PRTestBlock(block, weekKey, dayKey) {
+  const logKey = `${weekKey}_${dayKey}_${block.id}_pr`;
+  const log = state.logs[logKey] || {};
+  const currentPR = state.prs[block.exerciseName];
+  
+  const wrapper = el('div', {});
+  
+  wrapper.appendChild(el('div', { class: 'bg-yellow-400 text-black p-3 rounded mb-3' },
+    el('div', { class: 'text-[10px] font-black uppercase tracking-widest mb-1' }, 'TEST 1RM'),
+    el('div', { class: 'font-black text-lg leading-tight' }, block.exerciseName)
+  ));
+  
+  wrapper.appendChild(el('div', { class: 'text-zinc-500 text-xs mb-3' }, '↳ ' + block.warmup));
+  
+  if (currentPR) {
+    wrapper.appendChild(el('div', { 
+      class: 'bg-zinc-900 rounded p-2 mb-3 text-xs',
+      style: 'border:1px solid #27272a;'
+    },
+      el('span', { class: 'text-zinc-500' }, 'PR actual: '),
+      el('span', { class: 'text-yellow-400 font-mono font-black' }, currentPR.weight + ' lbs'),
+      el('span', { class: 'text-zinc-600 ml-2' }, `(S${currentPR.week} · ${currentPR.date})`)
+    ));
+  }
+  
+  const inputRow = el('div', { class: 'flex gap-2 mb-2' });
+  const weightInp = el('input', {
+    type: 'number',
+    inputmode: 'decimal',
+    placeholder: 'lbs',
+    value: log.weight || '',
+    style: 'flex:1; border-color:#facc15; font-family:monospace; font-size:20px; font-weight:900; text-align:center; padding:12px;'
+  });
+  weightInp.addEventListener('input', (e) => updateLog(logKey, { ...log, weight: e.target.value }));
+  
+  const prBtn = el('button', {
+    class: 'bg-yellow-400 text-black font-black px-4 rounded uppercase tracking-wider',
+    style: 'font-size:12px;',
+    onclick: () => { if (weightInp.value) savePR(block.exerciseName, weightInp.value); }
+  }, 'PR');
+  inputRow.appendChild(weightInp); inputRow.appendChild(prBtn);
+  wrapper.appendChild(inputRow);
+  
+  const notesIn = el('textarea', { placeholder: 'Notas...', rows: 2, style: 'font-size:14px;' });
+  notesIn.value = log.notes || '';
+  notesIn.addEventListener('input', (e) => updateLog(logKey, { ...log, notes: e.target.value }));
+  wrapper.appendChild(notesIn);
+  
+  return wrapper;
+}
+
+function ClassBlock(block, weekKey, dayKey) {
+  const logKey = `${weekKey}_${dayKey}_${block.id}_class`;
+  const log = state.logs[logKey] || {};
+  
+  const wrapper = el('div', { class: 'space-y-2' });
+  
+  const wod = el('textarea', {
+    placeholder: 'WOD del día (lo que ponga Rodrigo en el box)...',
+    rows: 3,
+    style: 'font-size:14px; font-family:monospace;'
+  });
+  wod.value = log.wod || '';
+  wod.addEventListener('input', (e) => updateLog(logKey, { ...log, wod: e.target.value }));
+  
+  const result = el('input', {
+    type: 'text',
+    placeholder: 'Resultado (tiempo/rondas/peso)',
+    value: log.result || '',
+    style: 'font-family:monospace; font-size:14px;'
+  });
+  result.addEventListener('input', (e) => updateLog(logKey, { ...log, result: e.target.value }));
+  
+  wrapper.appendChild(wod); wrapper.appendChild(result);
+  return wrapper;
+}
+
+function MobilityBlock(block, weekKey, dayKey) {
+  const logKey = `${weekKey}_${dayKey}_${block.id}_mob`;
+  const log = state.logs[logKey] || {};
+  
+  const btn = el('button', {
+    class: `w-full font-black py-2 rounded uppercase text-xs tracking-wider transition ${log.done ? 'bg-emerald-600 text-white' : 'bg-zinc-800 text-zinc-400'}`,
+    onclick: () => updateLog(logKey, { ...log, done: !log.done })
+  }, log.done ? '✓ COMPLETADO' : 'Marcar hecho');
+  
+  return el('div', { class: 'text-center py-2' },
+    el('div', { class: 'text-white font-black mb-1' }, block.description),
+    el('div', { class: 'text-emerald-500 text-xs mb-3' }, block.duration + ' min'),
+    btn
+  );
+}
+
+// ============================================
+// VIEWS
+// ============================================
+
+function renderHome() {
+  return el('div', { class: 'min-h-screen bg-black text-white relative overflow-hidden', style: 'font-family:JetBrains Mono, monospace;' },
+    el('div', { class: 'relative p-6 pt-12' },
+      el('div', { class: 'mb-12' },
+        el('div', { class: 'text-zinc-600 uppercase tracking-widest mb-2', style: 'font-size:10px; letter-spacing:0.3em;' }, 'ERICK ESTRADA · 29'),
+        el('div', { class: 'font-black text-3xl text-white tracking-tighter leading-none mb-1' }, 'CROSSFIT'),
+        el('div', { class: 'font-black text-red-600 tracking-tighter leading-none', style: 'font-size:48px;' }, 'TRACKER'),
+        el('div', { class: 'mt-3 flex gap-4 text-zinc-500 uppercase tracking-wider', style: 'font-size:10px;' },
+          el('div', {}, el('span', { class: 'text-zinc-700' }, 'Coach '), 'Rodrigo Rivera'),
+          el('div', {}, el('span', { class: 'text-zinc-700' }, 'Nut '), 'Paula Martinez')
+        )
+      ),
+      
+      el('div', { class: 'space-y-3' },
+        el('button', {
+          class: 'w-full bg-zinc-950 border-2 border-red-600 rounded-lg p-5 text-left',
+          onclick: () => setState({ view: 'training' })
+        },
+          el('div', { class: 'flex items-start gap-3' },
+            el('div', { class: 'bg-red-600 text-white p-3 rounded', html: Icons.dumbbell, style: 'font-size:28px;' }),
+            el('div', { class: 'flex-1' },
+              el('div', { class: 'text-red-500 uppercase tracking-widest mb-1', style: 'font-size:10px;' }, 'Entrar'),
+              el('div', { class: 'font-black text-xl text-white tracking-tight leading-none mb-1' }, 'ENTRENAMIENTO'),
+              el('div', { class: 'text-xs text-zinc-500' }, 'Rutina semanal · WOD · 1RM · Histórico')
+            ),
+            el('div', { class: 'text-zinc-600', html: Icons.chevronRight, style: 'font-size:20px;' })
+          )
+        ),
+
+        el('button', {
+          class: 'w-full bg-zinc-950 border-2 border-emerald-700 rounded-lg p-5 text-left',
+          onclick: () => setState({ view: 'nutrition' })
+        },
+          el('div', { class: 'flex items-start gap-3' },
+            el('div', { class: 'bg-emerald-700 text-white p-3 rounded', html: Icons.utensils, style: 'font-size:28px;' }),
+            el('div', { class: 'flex-1' },
+              el('div', { class: 'text-emerald-500 uppercase tracking-widest mb-1', style: 'font-size:10px;' }, 'Entrar'),
+              el('div', { class: 'font-black text-xl text-white tracking-tight leading-none mb-1' }, 'NUTRICIÓN'),
+              el('div', { class: 'text-xs text-zinc-500' }, 'Plan mensual · Macros · Suplementos')
+            ),
+            el('div', { class: 'text-zinc-600', html: Icons.chevronRight, style: 'font-size:20px;' })
+          )
+        ),
+
+        el('button', {
+          class: 'w-full bg-zinc-950 border-2 border-purple-700 rounded-lg p-5 text-left',
+          onclick: () => setState({ view: 'progress' })
+        },
+          el('div', { class: 'flex items-start gap-3' },
+            el('div', { class: 'text-white p-3 rounded', html: Icons.trendUp, style: 'font-size:28px; background:#7e22ce;' }),
+            el('div', { class: 'flex-1' },
+              el('div', { class: 'uppercase tracking-widest mb-1', style: 'font-size:10px; color:#a855f7;' }, 'Ver'),
+              el('div', { class: 'font-black text-xl text-white tracking-tight leading-none mb-1' }, 'TRACK RECORD'),
+              el('div', { class: 'text-xs text-zinc-500' }, 'Progreso semana · RX / ↓ / ↑ por ejercicio')
+            ),
+            el('div', { class: 'text-zinc-600', html: Icons.chevronRight, style: 'font-size:20px;' })
+          )
+        )
+      ),
+      
+      el('div', { class: 'mt-12 pt-6', style: 'border-top:1px solid #18181b;' },
+        el('div', { class: 'text-zinc-700 uppercase tracking-widest mb-3', style: 'font-size:10px;' }, 'Mantra'),
+        el('div', { class: 'text-zinc-500 text-xs italic leading-relaxed' }, '"Si quieres tener lo que pocos tienen, debes estar dispuesto a hacer lo que pocos hacen."')
+      ),
+      
+      el('div', { class: 'mt-6 text-center text-zinc-700', style: 'font-size:10px;' },
+        'v2.0 · ' + Object.keys(state.weeks).length + ' semana(s) guardada(s)'
+      )
+    )
+  );
+}
+
+function renderTraining() {
+  const weekData = state.weeks[state.activeWeek];
+  if (!weekData) return el('div', { class: 'text-white p-4' }, 'Semana no encontrada');
+  
+  const dayData = weekData.days[state.activeDay];
+  const dayIdx = DAY_KEYS.indexOf(state.activeDay);
+  const weekKey = `S${state.activeWeek}`;
+  
+  // calc completion
+  let total = 0, done = 0;
+  dayData.blocks.forEach(b => {
+    if (b.exercises) {
+      b.exercises.forEach(ex => {
+        ex.prescription.forEach(p => { for (let i=0; i<(p.sets||1); i++) total++; });
+      });
+    } else total++;
+  });
+  Object.keys(state.logs).forEach(k => {
+    if (k.startsWith(`${weekKey}_${state.activeDay}_`)) {
+      const l = state.logs[k];
+      if (l && (l.status || l.done || l.time || l.notes || l.wod || l.weight)) done++;
+    }
+  });
+  const completion = total > 0 ? Math.min(100, Math.round((done/total)*100)) : 0;
+  
+  const container = el('div', { class: 'min-h-screen bg-black text-white', style: 'font-family:JetBrains Mono, monospace;' });
+  
+  // Header
+  const header = el('header', { class: 'sticky top-0 bg-black z-20', style: 'border-bottom:2px solid #dc2626;' });
+  
+  const headerTop = el('div', { class: 'p-3 flex items-center gap-2' },
+    el('button', { class: 'text-white p-1', onclick: () => setState({ view: 'home' }), html: Icons.chevronLeft, style: 'font-size:22px;' }),
+    el('div', { class: 'flex-1 min-w-0' },
+      el('button', {
+        class: 'text-zinc-500 uppercase tracking-widest flex items-center gap-1',
+        style: 'font-size:10px;',
+        onclick: () => setState({ showWeekPicker: true }),
+        html: `${Icons.calendar} <span>SEMANA ${state.activeWeek} · Rodrigo Rivera</span>`
+      }),
+      el('div', { class: 'font-black text-lg tracking-tight leading-tight' }, dayData.name)
+    ),
+    el('button', { class: 'bg-zinc-800 text-white p-2 rounded', onclick: () => setState({ showPaste: true }), html: Icons.plus, style: 'font-size:16px;' }),
+    el('button', { class: 'bg-yellow-400 text-black font-black rounded tracking-wider', style: 'padding:8px 10px; font-size:10px;', onclick: () => setState({ view: 'prs' }) }, 'PR')
+  );
+  header.appendChild(headerTop);
+  
+  // progress
+  const progressBar = el('div', { class: 'h-1 bg-zinc-900' });
+  progressBar.appendChild(el('div', { class: 'bg-red-600', style: `height:100%; width:${completion}%; transition:all 0.3s;` }));
+  header.appendChild(progressBar);
+  
+  // day tabs
+  const tabs = el('div', { class: 'grid grid-cols-6', style: 'border-top:1px solid #18181b;' });
+  DAY_KEYS.forEach(d => {
+    const active = d === state.activeDay;
+    const tab = el('button', {
+      class: `font-black tracking-wider relative ${active ? 'text-white' : 'text-zinc-600'}`,
+      style: 'padding:10px 0; font-size:11px;',
+      onclick: () => setState({ activeDay: d })
+    }, d);
+    if (active) {
+      tab.appendChild(el('div', { class: 'bg-red-600', style: 'position:absolute; bottom:0; left:0; right:0; height:2px;' }));
+    }
+    tabs.appendChild(tab);
+  });
+  header.appendChild(tabs);
+  container.appendChild(header);
+  
+  // Content
+  const content = el('div', { class: 'p-3 pb-24 space-y-3' });
+  
+  dayData.blocks.forEach((block, bIdx) => {
+    const meta = TYPE_META[block.type] || TYPE_META.STRENGTH;
+    const card = el('div', { class: 'bg-zinc-950 rounded-lg overflow-hidden', style: 'border:2px solid #27272a;' });
+    
+    const head = el('div', { class: 'flex items-center gap-2 p-2', style: 'border-bottom:1px solid #27272a;' },
+      el('div', { 
+        class: 'text-white font-black uppercase tracking-widest',
+        style: `background:${meta.color}; padding:2px 8px; border-radius:4px; font-size:10px;`
+      }, meta.label),
+      el('div', { class: 'font-black text-white uppercase tracking-wide text-xs' }, block.title),
+      el('div', { class: 'ml-auto text-zinc-600 font-mono', style: 'font-size:10px;' }, `${bIdx+1}/${dayData.blocks.length}`)
+    );
+    card.appendChild(head);
+    
+    const body = el('div', { class: 'p-3' });
+    
+    if ((block.type === 'WEIGHTLIFTING' || block.type === 'STRENGTH' || block.type === 'GYMNASTICS') && block.exercises) {
+      block.exercises.forEach(ex => body.appendChild(ExerciseBlock(ex, weekKey, state.activeDay, block.id)));
+    } else if (block.type === 'CONDITIONING') {
+      body.appendChild(ConditioningBlock(block, weekKey, state.activeDay));
+    } else if (block.type === 'AEROBIC') {
+      body.appendChild(AerobicBlock(block, weekKey, state.activeDay));
+    } else if (block.type === 'PR_TEST') {
+      body.appendChild(PRTestBlock(block, weekKey, state.activeDay));
+    } else if (block.type === 'CLASS') {
+      body.appendChild(ClassBlock(block, weekKey, state.activeDay));
+    } else if (block.type === 'MOBILITY') {
+      body.appendChild(MobilityBlock(block, weekKey, state.activeDay));
+    }
+    
+    card.appendChild(body);
+    content.appendChild(card);
+  });
+  
+  content.appendChild(el('div', { class: 'text-center text-zinc-700 font-mono', style: 'padding-top:8px; font-size:10px;' }, '━ FIN DEL DÍA ━'));
+  container.appendChild(content);
+  
+  // Bottom nav
+  const bottom = el('div', { 
+    class: 'fixed left-0 right-0 bg-black p-2 flex gap-2',
+    style: 'bottom:0; border-top:2px solid #dc2626; padding-bottom: calc(8px + env(safe-area-inset-bottom));'
+  });
+  
+  const prevBtn = el('button', {
+    class: `flex-1 bg-zinc-900 text-white py-2 rounded font-black uppercase tracking-wider flex items-center justify-center gap-1 ${dayIdx === 0 ? '' : ''}`,
+    style: `font-size:11px; ${dayIdx === 0 ? 'opacity:0.3;' : ''}`,
+    onclick: () => { if (dayIdx > 0) setState({ activeDay: DAY_KEYS[dayIdx - 1] }); window.scrollTo(0,0); },
+    html: `${Icons.chevronLeft} <span>${dayIdx > 0 ? DAY_KEYS[dayIdx-1] : '—'}</span>`
+  });
+  
+  const nextBtn = el('button', {
+    class: 'flex-1 bg-red-600 text-white py-2 rounded font-black uppercase tracking-wider flex items-center justify-center gap-1',
+    style: `font-size:11px; ${dayIdx === 5 ? 'opacity:0.3;' : ''}`,
+    onclick: () => { if (dayIdx < 5) setState({ activeDay: DAY_KEYS[dayIdx + 1] }); window.scrollTo(0,0); },
+    html: `<span>${dayIdx < 5 ? DAY_KEYS[dayIdx+1] : '—'}</span> ${Icons.chevronRight}`
+  });
+  
+  bottom.appendChild(prevBtn); bottom.appendChild(nextBtn);
+  container.appendChild(bottom);
+  
+  return container;
+}
+
+function renderNutrition() {
+  return el('div', { class: 'min-h-screen bg-black text-white', style: 'font-family:JetBrains Mono, monospace;' },
+    el('header', { class: 'sticky top-0 bg-black z-10 p-4 flex items-center gap-2', style: 'border-bottom:2px solid #047857;' },
+      el('button', { class: 'text-white', onclick: () => setState({ view: 'home' }), html: Icons.chevronLeft, style: 'font-size:22px;' }),
+      el('div', {},
+        el('div', { class: 'text-zinc-500 uppercase tracking-widest', style: 'font-size:10px;' }, 'Paula Martinez'),
+        el('div', { class: 'font-black' }, 'NUTRICIÓN')
+      )
+    ),
+    el('div', { class: 'p-6 text-center' },
+      el('div', { class: 'text-emerald-700', style: 'font-size:48px; opacity:0.5; margin-bottom:16px;', html: Icons.utensils }),
+      el('div', { class: 'text-white font-black mb-2' }, 'Esperando plan'),
+      el('div', { class: 'text-zinc-500 text-xs leading-relaxed mb-6', style: 'max-width:280px; margin-left:auto; margin-right:auto;' },
+        'Cuando recibas el plan de alimentación y suplementación de Paula, lo cargamos aquí.'
+      ),
+      el('div', { class: 'bg-zinc-900 rounded-lg p-4 text-left space-y-2', style: 'border:1px solid #27272a;' },
+        el('div', { class: 'text-zinc-500 uppercase tracking-widest mb-1', style: 'font-size:10px;' }, 'Lo que tendrá:'),
+        el('div', { class: 'text-zinc-400 text-xs' }, '→ Comidas con gramos exactos'),
+        el('div', { class: 'text-zinc-400 text-xs' }, '→ Macros totales del día'),
+        el('div', { class: 'text-zinc-400 text-xs' }, '→ Pre/Intra/Post entreno'),
+        el('div', { class: 'text-zinc-400 text-xs' }, '→ Suplementos: dosis y timing'),
+        el('div', { class: 'text-zinc-400 text-xs' }, '→ Sustituciones')
+      )
+    )
+  );
+}
+
+function renderPRs() {
+  const entries = Object.entries(state.prs).sort((a,b) => parseFloat(b[1].weight) - parseFloat(a[1].weight));
+  
+  const container = el('div', { class: 'min-h-screen bg-black text-white', style: 'font-family:JetBrains Mono, monospace;' });
+  
+  container.appendChild(el('header', { class: 'sticky top-0 bg-black z-10 p-4 flex items-center justify-between', style: 'border-bottom:2px solid #facc15;' },
+    el('button', { class: 'text-white', onclick: () => setState({ view: 'training' }), html: Icons.chevronLeft, style: 'font-size:26px;' }),
+    el('div', { class: 'font-black' }, 'PERSONAL RECORDS'),
+    el('div', { class: 'w-6' })
+  ));
+  
+  const body = el('div', { class: 'p-4' });
+  if (entries.length === 0) {
+    body.appendChild(el('div', { class: 'text-center text-zinc-500 py-12' },
+      el('div', { html: Icons.trendUp, style: 'font-size:48px; opacity:0.3; margin-bottom:12px;' }),
+      el('div', { class: 'text-sm' }, 'Sin PRs registrados aún.')
+    ));
+  } else {
+    const list = el('div', { class: 'space-y-2' });
+    entries.forEach(([name, pr]) => {
+      list.appendChild(el('div', { class: 'bg-zinc-900 rounded-lg p-4', style: 'border:2px solid #facc15;' },
+        el('div', { class: 'text-zinc-500 uppercase tracking-widest mb-1', style: 'font-size:10px;' }, name),
+        el('div', { class: 'flex items-baseline justify-between' },
+          el('div', { class: 'font-black text-yellow-400 font-mono', style: 'font-size:28px;' },
+            pr.weight,
+            el('span', { class: 'text-zinc-500 ml-1', style: 'font-size:16px;' }, 'lbs')
+          ),
+          el('div', { class: 'text-zinc-500 font-mono', style: 'font-size:10px;' }, `S${pr.week} · ${pr.date}`)
+        )
+      ));
+    });
+    body.appendChild(list);
+  }
+  container.appendChild(body);
+  
+  return container;
+}
+
+function renderHistoryModal() {
+  if (!state.historyOf) return null;
+  
+  const name = state.historyOf;
+  const history = [];
+  Object.entries(state.weeks).forEach(([wNum, week]) => {
+    Object.entries(week.days || {}).forEach(([dayKey, day]) => {
+      day.blocks?.forEach(block => {
+        block.exercises?.forEach(ex => {
+          if (ex.name === name) {
+            const sets = [];
+            ex.prescription.forEach(p => {
+              for (let i = 0; i < (p.sets || 1); i++) sets.push(p);
+            });
+            const logs = sets.map((p, i) => {
+              const logKey = `S${wNum}_${dayKey}_${block.id}_${ex.name}_${i}`;
+              return { prescription: p, log: state.logs[logKey], setIdx: i };
+            });
+            history.push({ week: wNum, day: dayKey, dayName: day.name, exercise: ex, logs });
+          }
+        });
+      });
+    });
+  });
+  
+  const modal = el('div', { 
+    class: 'fixed inset-0 z-50 flex flex-col bg-overlay fade-in',
+    style: 'top:0; left:0; right:0; bottom:0;'
+  });
+  
+  modal.appendChild(el('header', { class: 'p-4 flex items-center justify-between', style: 'border-bottom:2px solid #facc15;' },
+    el('div', {},
+      el('div', { class: 'text-zinc-500 uppercase tracking-widest', style: 'font-size:10px;' }, 'Historial'),
+      el('div', { class: 'font-black text-white text-sm leading-tight' }, name)
+    ),
+    el('button', { class: 'text-white p-1', onclick: () => setState({ historyOf: null }), html: Icons.x, style: 'font-size:24px;' })
+  ));
+  
+  const body = el('div', { class: 'flex-1 overflow-y-auto p-4 space-y-3' });
+  
+  if (history.length === 0) {
+    body.appendChild(el('div', { class: 'text-center text-zinc-500 py-12 text-sm' },
+      el('div', { html: Icons.history, style: 'font-size:48px; opacity:0.3; margin-bottom:12px;' }),
+      'Sin registros previos'
+    ));
+  } else {
+    history.forEach(h => {
+      const card = el('div', { class: 'bg-zinc-900 rounded p-3', style: 'border:1px solid #27272a;' });
+      card.appendChild(el('div', { class: 'text-zinc-500 uppercase tracking-widest mb-1', style: 'font-size:10px;' }, `Semana ${h.week} · ${h.dayName}`));
+      if (h.exercise.note) card.appendChild(el('div', { class: 'text-amber-500 italic mb-2', style: 'font-size:10px;' }, '↳ ' + h.exercise.note));
+      
+      const logsList = el('div', { class: 'space-y-1' });
+      h.logs.forEach((l, i) => {
+        const status = l.log?.status;
+        const badges = {
+          prescribed: { c: 'bg-emerald-500 text-black', t: 'RX' },
+          less: { c: 'bg-amber-500 text-black', t: '↓' },
+          more: { c: 'bg-red-500 text-white', t: '↑' }
+        };
+        const b = badges[status];
+        const row = el('div', { class: 'flex items-center gap-2 text-xs' },
+          el('div', { class: 'w-6 h-6 rounded bg-zinc-800 flex items-center justify-center font-mono text-white flex-shrink-0', style: 'font-size:10px;' }, String(i+1)),
+          el('div', { class: 'font-mono text-zinc-400 flex-1' },
+            `${l.prescription.reps} reps ${l.prescription.weight ? '@ ' + l.prescription.weight + (l.prescription.unit === '%' ? '%' : ' ' + (l.prescription.unit || 'lbs')) : ''}`
+          )
+        );
+        if (b) row.appendChild(el('div', { class: b.c, style: 'padding:2px 6px; border-radius:3px; font-size:9px; font-weight:900;' }, b.t));
+        if (l.log?.weight) row.appendChild(el('div', { class: 'text-yellow-400 font-mono font-bold', style: 'font-size:11px;' }, l.log.weight));
+        logsList.appendChild(row);
+      });
+      card.appendChild(logsList);
+      body.appendChild(card);
+    });
+  }
+  modal.appendChild(body);
+  return modal;
+}
+
+function renderPasteModal() {
+  if (!state.showPaste) return null;
+  
+  let textValue = '';
+  const existingWeeks = Object.keys(state.weeks).map(Number);
+  let weekNum = (existingWeeks.length ? Math.max(...existingWeeks) : 0) + 1;
+  
+  const modal = el('div', { class: 'fixed inset-0 bg-black z-50 flex flex-col fade-in', style: 'top:0;left:0;right:0;bottom:0;' });
+  
+  modal.appendChild(el('header', { class: 'p-4 flex items-center justify-between', style: 'border-bottom:2px solid #dc2626;' },
+    el('div', {},
+      el('div', { class: 'text-zinc-500 uppercase tracking-widest', style: 'font-size:10px;' }, 'Cargar Semana'),
+      el('div', { class: 'font-black text-white' }, 'Pegar texto del Word')
+    ),
+    el('button', { class: 'text-white p-1', onclick: () => setState({ showPaste: false }), html: Icons.x, style: 'font-size:24px;' })
+  ));
+  
+  const body = el('div', { class: 'flex-1 overflow-y-auto p-4 space-y-3' });
+  
+  body.appendChild(el('div', {},
+    el('label', { class: 'text-zinc-500 uppercase tracking-widest mb-1', style: 'font-size:10px; display:block;' }, 'Número de semana'),
+    (() => {
+      const i = el('input', { type: 'number', value: weekNum, style: 'font-family:monospace;' });
+      i.addEventListener('input', (e) => { weekNum = parseInt(e.target.value) || 1; });
+      return i;
+    })()
+  ));
+  
+  body.appendChild(el('div', {},
+    el('label', { class: 'text-zinc-500 uppercase tracking-widest mb-1', style: 'font-size:10px; display:block;' }, 'Texto del Word'),
+    (() => {
+      const t = el('textarea', { 
+        rows: 16, 
+        placeholder: 'LUNES\n1-WEIGHTLIFTING\nOVERHEAD SQUAT\n1x5 65 lbs\n1x4 70 lbs\n...',
+        style: 'font-family:monospace; font-size:12px;'
+      });
+      t.addEventListener('input', (e) => { textValue = e.target.value; });
+      return t;
+    })(),
+    el('div', { class: 'text-zinc-600 mt-1', style: 'font-size:10px;' },
+      'Tip: copia toda la tabla del Word. Separa por días (LUNES...) y bloques (1-WEIGHTLIFTING...).'
+    )
+  ));
+  
+  modal.appendChild(body);
+  
+  modal.appendChild(el('div', { class: 'p-3 flex gap-2', style: 'border-top:1px solid #27272a;' },
+    el('button', { 
+      class: 'flex-1 bg-zinc-900 text-white font-black py-3 rounded uppercase tracking-wider',
+      style: 'font-size:12px;',
+      onclick: () => setState({ showPaste: false })
+    }, 'Cancelar'),
+    el('button', {
+      class: 'flex-1 bg-red-600 text-white font-black py-3 rounded uppercase tracking-wider',
+      style: 'font-size:12px;',
+      onclick: () => {
+        if (!textValue.trim()) return;
+        const parsed = parseWeek(textValue, weekNum);
+        setState({
+          weeks: { ...state.weeks, [weekNum]: parsed },
+          activeWeek: weekNum,
+          showPaste: false,
+        });
+      }
+    }, 'Guardar Semana')
+  ));
+  
+  return modal;
+}
+
+function renderWeekPicker() {
+  if (!state.showWeekPicker) return null;
+  
+  const modal = el('div', { class: 'fixed inset-0 bg-overlay z-50 flex flex-col fade-in', style: 'top:0;left:0;right:0;bottom:0;' });
+  
+  modal.appendChild(el('header', { class: 'p-4 flex items-center justify-between', style: 'border-bottom:2px solid #dc2626;' },
+    el('div', { class: 'font-black text-white' }, 'Cambiar semana'),
+    el('button', { class: 'text-white', onclick: () => setState({ showWeekPicker: false }), html: Icons.x, style: 'font-size:22px;' })
+  ));
+  
+  const body = el('div', { class: 'flex-1 overflow-y-auto p-4 space-y-2' });
+  
+  Object.keys(state.weeks).sort((a,b) => b - a).forEach(num => {
+    const active = parseInt(num) === state.activeWeek;
+    body.appendChild(el('button', {
+      class: `w-full text-left p-3 rounded ${active ? 'border-red-600 bg-red-950' : 'border-zinc-800 bg-zinc-900'}`,
+      style: `border:2px solid ${active ? '#dc2626' : '#27272a'};`,
+      onclick: () => setState({ activeWeek: parseInt(num), showWeekPicker: false })
+    },
+      el('div', { class: 'text-white font-black' }, `Semana ${num}`),
+      el('div', { class: 'text-zinc-500 text-xs font-mono' }, state.weeks[num].startDate)
+    ));
+  });
+  
+  modal.appendChild(body);
+  return modal;
+}
+
+// ============================================
+// TRACK RECORD: progreso semanal por ejercicio
+// ============================================
+function renderProgress() {
+  // Recolectar todos los ejercicios que aparecen en alguna semana
+  const exerciseMap = {}; // { "BACK SQUAT": [ { week, day, prescription, logs[] } ] }
+
+  Object.entries(state.weeks).forEach(([wNum, week]) => {
+    Object.entries(week.days || {}).forEach(([dayKey, day]) => {
+      day.blocks?.forEach(block => {
+        block.exercises?.forEach(ex => {
+          if (!exerciseMap[ex.name]) exerciseMap[ex.name] = [];
+          // Expandir sets para calcular globales
+          let gIdx = 0;
+          const setsData = ex.prescription.map(p => {
+            const rows = [];
+            for (let i = 0; i < (p.sets || 1); i++) {
+              const logKey = `S${wNum}_${dayKey}_${block.id}_${ex.name}_${gIdx}`;
+              rows.push({ prescription: p, log: state.logs[logKey] || null, globalIdx: gIdx });
+              gIdx++;
+            }
+            return { prescription: p, rows };
+          });
+          const totalSets = setsData.reduce((a, g) => a + g.rows.length, 0);
+          const doneSets = setsData.reduce((a, g) => a + g.rows.filter(r => r.log?.status).length, 0);
+          exerciseMap[ex.name].push({
+            week: parseInt(wNum),
+            dayKey,
+            dayName: day.name,
+            blockType: block.type,
+            setsData,
+            totalSets,
+            doneSets,
+            note: ex.note,
+          });
+        });
+      });
+    });
+  });
+
+  // Ordenar: ejercicios que tienen más semanas registradas primero
+  const sorted = Object.entries(exerciseMap).sort((a, b) => b[1].length - a[1].length);
+
+  const container = el('div', { class: 'min-h-screen bg-black text-white', style: 'font-family:JetBrains Mono, monospace;' });
+
+  // Header
+  container.appendChild(el('header', { class: 'sticky top-0 bg-black z-10 p-4 flex items-center gap-2', style: 'border-bottom:2px solid #9333ea;' },
+    el('button', { class: 'text-white', onclick: () => setState({ view: 'home' }), html: Icons.chevronLeft, style: 'font-size:22px;' }),
+    el('div', {},
+      el('div', { class: 'text-zinc-500 uppercase tracking-widest', style: 'font-size:10px;' }, 'Erick Estrada'),
+      el('div', { class: 'font-black' }, 'TRACK RECORD')
+    )
+  ));
+
+  const body = el('div', { class: 'p-4 pb-8' });
+
+  if (sorted.length === 0) {
+    body.appendChild(el('div', { class: 'text-center text-zinc-500 py-12' },
+      el('div', { html: Icons.trendUp, style: 'font-size:48px; opacity:0.3; margin-bottom:12px;' }),
+      el('div', { class: 'text-sm' }, 'Sin datos registrados aún.'),
+      el('div', { class: 'text-xs mt-1' }, 'Entrena y marca tus sets para ver el progreso.')
+    ));
+    container.appendChild(body);
+    return container;
+  }
+
+  sorted.forEach(([exName, entries]) => {
+    // Solo mostrar ejercicios que tienen al menos 1 set registrado en alguna semana
+    const hasAnyLog = entries.some(e => e.doneSets > 0);
+    if (!hasAnyLog && Object.keys(state.weeks).length <= 1) {
+      // En semana 1 mostramos todos para que vea la estructura
+    }
+
+    const meta = TYPE_META[entries[0].blockType] || TYPE_META.STRENGTH;
+
+    const card = el('div', {
+      class: 'bg-zinc-950 rounded-lg overflow-hidden mb-4',
+      style: 'border:2px solid #27272a;'
+    });
+
+    // Header del ejercicio
+    card.appendChild(el('div', { class: 'p-3 flex items-center gap-2', style: 'border-bottom:1px solid #27272a;' },
+      el('div', { style: `background:${meta.color}; color:#fff; font-size:10px; font-weight:900; padding:2px 6px; border-radius:4px; text-transform:uppercase; letter-spacing:0.1em;` }, meta.label),
+      el('div', { class: 'text-white font-black text-sm uppercase tracking-wide flex-1 leading-tight' }, exName)
+    ));
+
+    // Tabla semana a semana
+    const tableWrap = el('div', { style: 'overflow-x:auto;' });
+    const table = el('table', { style: 'width:100%; border-collapse:collapse;' });
+
+    // Encabezado: Semana | Prescripción | RX | ↓ | ↑ | Notas
+    const thead = el('thead', {});
+    const headRow = el('tr', {});
+    ['SEM', 'PRESCRIPCIÓN', '✓RX', '↓', '↑', 'NOTA'].forEach((h, i) => {
+      headRow.appendChild(el('th', {
+        style: `padding:6px 8px; font-size:9px; color:#52525b; text-align:${i < 2 ? 'left' : 'center'}; text-transform:uppercase; letter-spacing:0.1em; white-space:nowrap; border-bottom:1px solid #27272a;`
+      }, h));
+    });
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+
+    const tbody = el('tbody', {});
+    entries.sort((a, b) => a.week - b.week).forEach(entry => {
+      // Una fila por grupo de prescripción dentro de la semana
+      entry.setsData.forEach((group, gIdx) => {
+        const p = group.prescription;
+        const weightStr = p.weight != null
+          ? `${p.weight}${p.unit === '%' ? '%' : ` ${p.unit || 'lbs'}`}`
+          : '';
+        const prescStr = `${p.sets || 1}×${p.reps}${weightStr ? ' @ ' + weightStr : ''}`;
+
+        const rxCount = group.rows.filter(r => r.log?.status === 'prescribed').length;
+        const lessCount = group.rows.filter(r => r.log?.status === 'less').length;
+        const moreCount = group.rows.filter(r => r.log?.status === 'more').length;
+        const totalRows = group.rows.length;
+        const doneCount = rxCount + lessCount + moreCount;
+
+        // Color de fondo si todos completados
+        const allDone = doneCount === totalRows && totalRows > 0;
+        const rowBg = allDone ? 'rgba(5,150,105,0.08)' : 'transparent';
+
+        const tr = el('tr', { style: `background:${rowBg}; border-bottom:1px solid #18181b;` });
+
+        // Semana (solo en el primer grupo de esa entrada)
+        const weekCell = el('td', {
+          style: 'padding:6px 8px; font-size:11px; font-family:monospace; color:#facc15; font-weight:900; white-space:nowrap;'
+        }, gIdx === 0 ? `S${entry.week}` : '');
+        tr.appendChild(weekCell);
+
+        // Prescripción
+        tr.appendChild(el('td', {
+          style: 'padding:6px 8px; font-size:12px; font-family:monospace; color:#fff; white-space:nowrap;'
+        }, prescStr));
+
+        // RX
+        tr.appendChild(el('td', {
+          style: `padding:6px 8px; text-align:center; font-size:12px; font-family:monospace; color:${rxCount > 0 ? '#10b981' : '#3f3f46'}; font-weight:900;`
+        }, rxCount > 0 ? String(rxCount) : '—'));
+
+        // Menos
+        tr.appendChild(el('td', {
+          style: `padding:6px 8px; text-align:center; font-size:12px; font-family:monospace; color:${lessCount > 0 ? '#f59e0b' : '#3f3f46'}; font-weight:900;`
+        }, lessCount > 0 ? String(lessCount) : '—'));
+
+        // Más
+        tr.appendChild(el('td', {
+          style: `padding:6px 8px; text-align:center; font-size:12px; font-family:monospace; color:${moreCount > 0 ? '#ef4444' : '#3f3f46'}; font-weight:900;`
+        }, moreCount > 0 ? String(moreCount) : '—'));
+
+        // Nota
+        const noteLogKey = `S${entry.week}_${entry.dayKey}_note_${exName}`;
+        // buscar nota en logs del ejercicio
+        const exNoteKey = Object.keys(state.logs).find(k =>
+          k.includes(`S${entry.week}_${entry.dayKey}`) && k.includes(exName) && k.endsWith('_note')
+        );
+        const noteText = exNoteKey ? (state.logs[exNoteKey]?.text || '') : '';
+        tr.appendChild(el('td', {
+          style: 'padding:6px 8px; font-size:11px; color:#71717a; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;'
+        }, noteText || ''));
+
+        tbody.appendChild(tr);
+      });
+    });
+
+    table.appendChild(tbody);
+    tableWrap.appendChild(table);
+    card.appendChild(tableWrap);
+
+    // Mini progreso visual: barras por semana
+    if (entries.length >= 2) {
+      const progressWrap = el('div', { style: 'padding:8px 12px; border-top:1px solid #18181b; display:flex; gap:4px; align-items:flex-end; height:32px;' });
+      const maxDone = Math.max(...entries.map(e => e.doneSets), 1);
+      entries.sort((a, b) => a.week - b.week).forEach(e => {
+        const pct = e.totalSets > 0 ? (e.doneSets / e.totalSets) : 0;
+        const barH = Math.max(4, Math.round(pct * 20));
+        const barColor = pct === 1 ? '#10b981' : pct > 0 ? '#facc15' : '#27272a';
+        const bar = el('div', {
+          title: `S${e.week}: ${e.doneSets}/${e.totalSets}`,
+          style: `flex:1; height:${barH}px; background:${barColor}; border-radius:2px; transition:height 0.3s;`
+        });
+        progressWrap.appendChild(bar);
+      });
+      card.appendChild(progressWrap);
+    }
+
+    body.appendChild(card);
+  });
+
+  container.appendChild(body);
+  return container;
+}
+
+
+function render() {
+  const root = document.getElementById('app');
+  root.innerHTML = '';
+  
+  let main;
+  if (state.view === 'home') main = renderHome();
+  else if (state.view === 'training') main = renderTraining();
+  else if (state.view === 'nutrition') main = renderNutrition();
+  else if (state.view === 'prs') main = renderPRs();
+  else if (state.view === 'progress') main = renderProgress();
+  
+  root.appendChild(main);
+  
+  const h = renderHistoryModal(); if (h) root.appendChild(h);
+  const p = renderPasteModal(); if (p) root.appendChild(p);
+  const wp = renderWeekPicker(); if (wp) root.appendChild(wp);
+}
+
+// initial render
+render();
